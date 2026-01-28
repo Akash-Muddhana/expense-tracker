@@ -1,0 +1,22 @@
+.DashBoard-main {
+  position: relative;
+  min-height: 100vh;
+}
+.expense-button {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 2%;
+  left: 90%;
+  
+}
+.new-expense-button {
+  width: 3rem;
+  aspect-ratio: 1;
+  border-radius: 1.5rem;
+  border: none;
+  background-color: #116b98;
+}
+

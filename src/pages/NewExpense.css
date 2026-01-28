@@ -1,0 +1,18 @@
+.Newexpense-main{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3rem;
+    background-color: #0058AB;
+    width: 50vh;
+    height: 70vh;
+    position: absolute;
+    top: 12%;
+    left: 32%;
+    border-radius: 2rem;
+}
+body{
+    background-color: #499FA4;
+}

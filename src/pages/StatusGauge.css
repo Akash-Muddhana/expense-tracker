@@ -1,0 +1,28 @@
+.gauge-container {
+  width: 15rem;
+  position: absolute;
+  top: 20%;
+  left: 20%;
+}
+
+.gauge {
+  width: 100%;
+}
+
+.zone {
+  fill: none;
+  stroke-width: 14;
+  stroke-linecap: round;
+}
+
+.red {
+  stroke: #e74c3c;
+}
+
+.orange {
+  stroke: #f39c12;
+}
+
+.green {
+  stroke: #2ecc71;
+}
