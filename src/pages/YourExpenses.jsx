@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Header } from "../Components/Header";
-import './YourExpenses.css'
+import "./YourExpenses.css";
+import { useNavigate } from "react-router-dom";
+
 export function YourExpenses() {
   const [expenses, setExpenses] = useState(() => {
     return JSON.parse(localStorage.getItem("expenses")) || [];
@@ -12,6 +14,7 @@ export function YourExpenses() {
     setExpenses(updated);
     localStorage.setItem("expenses", JSON.stringify(updated));
   }
+  const navigate = useNavigate();
 
   return (
     <>
@@ -27,10 +30,14 @@ export function YourExpenses() {
             <p>
               {e.category} - {e.subCategory}
             </p>
+            <p>amount : {e.amount}</p>
             <p>Rating: {e.rating}</p>
-            <p>{e.experience}</p>
+            <p>Experience : {e.experience}</p>
 
-            <button onClick={() => deleteExpense(i)} className="del-button">Delete</button>
+            <button onClick={() => deleteExpense(i)} className="del-button">
+              Delete
+            </button>
+            <button onClick={() => navigate(`/edit/${e.id}`)}>Edit</button>
           </div>
         ))}
       </div>

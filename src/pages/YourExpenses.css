@@ -1,17 +1,21 @@
 .expenses-card{
-    background-color: #E9BC8B;
-    height: 50vh;
-    width: 80vh;
-    border-radius: 2rem;
     display: flex;
-    justify-content: center;
     flex-direction: column;
-    position: absolute;
-    top: 15%;
+    gap: 10px;
+    padding: 20px;
 }
 .del-button{
     background-color: #DDD5F4;
     text-decoration: none;
     border-width: 0.002rem;
     border-radius: 1rem;
+}
+.expense-card {
+    background-color: #E9BC8B;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin: 1rem;
+    height: 30vh;
+    width: 80vh;
+    border-radius: 2rem;
 }

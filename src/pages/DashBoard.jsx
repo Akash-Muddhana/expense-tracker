@@ -3,10 +3,8 @@ import { StatusGauge } from "./StatusGauge";
 import { Header } from "../Components/Header";
 import { useNavigate } from "react-router-dom";
 
-
 export function DashBoard() {
   const navigate = useNavigate();
-
 
   return (
     <>
@@ -23,8 +21,6 @@ export function DashBoard() {
         </div>
 
         <StatusGauge value={80} />
-
-
         
       </main>
     </>
