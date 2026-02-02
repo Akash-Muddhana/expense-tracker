@@ -19,4 +19,9 @@
   border: none;
   background-color: #116b98;
 }
+.totalExpenses{
+  position: absolute;
+  top: 45%;
+  left: 22%;
+}
 

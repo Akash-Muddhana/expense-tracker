@@ -9,6 +9,7 @@ export function NewExpense() {
   const [title, setTitle] = useState("");
   const [experience, setExperience] = useState("");
   const [amount, setAmount] = useState(0);
+  
   function saveExpenses() {
     const newExpense = {
       id: Date.now(),

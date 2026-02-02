@@ -8,6 +8,7 @@ export function YourExpenses() {
     return JSON.parse(localStorage.getItem("expenses")) || [];
   });
 
+
   function deleteExpense(index) {
     const updated = expenses.filter((_, i) => i !== index);
 
@@ -33,6 +34,7 @@ export function YourExpenses() {
             <p>amount : {e.amount}</p>
             <p>Rating: {e.rating}</p>
             <p>Experience : {e.experience}</p>
+            
 
             <button onClick={() => deleteExpense(i)} className="del-button">
               Delete
