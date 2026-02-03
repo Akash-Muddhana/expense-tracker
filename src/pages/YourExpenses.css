@@ -1,8 +1,8 @@
 .expenses-card{
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 20px;
+    gap: 1rem;
+    
 }
 .del-button{
     background-color: #DDD5F4;
@@ -15,7 +15,7 @@
     border-radius: 1rem;
     padding: 1rem;
     margin: 1rem;
-    height: 45vh;
-    width: 80vh;
+    height: 40vh;
+    width: 30vh;
     border-radius: 2rem;
 }

@@ -1,6 +1,7 @@
 .DashBoard-main {
   position: relative;
   min-height: 100vh;
+  padding: 3rem;
 }
 .expense-button {
   display: flex;
@@ -9,7 +10,7 @@
   align-items: center;
   position: absolute;
   top: 7%;
-  left: 70%;
+  left: 90vh;
   
 }
 .new-expense-button {
