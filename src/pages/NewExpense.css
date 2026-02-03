@@ -1,18 +1,33 @@
-.Newexpense-main{
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    padding: 2rem;
-    background-color: #0058AB;
-    width: 50vh;
-    height: 100vh;
-    position: absolute;
-    top: 12vh;
-    left: 50vh;
-    border-radius: 2rem;
+.Newexpense-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+
+  background-color: #0058AB;
+  width: 95%;
+  max-width: 420px;
+
+  margin: 2rem auto;
+  border-radius: 1.5rem;
 }
-body{
-    background-color: #499FA4;
+
+body {
+  background-color: #499FA4;
+}
+
+input,
+select {
+  width: 90%;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: none;
+}
+
+button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
 }

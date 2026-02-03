@@ -1,26 +1,19 @@
 import "./StatusGauge.css";
 
 export function StatusGauge({ value = 0, min = 0, max = 100 }) {
-  // Clamp value (prevent breaking UI)
   const clamped = Math.min(Math.max(value, min), max);
 
-  // Convert value to angle (-90 to +90)
   const percent = (clamped - min) / (max - min);
   const angle = -90 + percent * 180;
 
   return (
-    <div className="gauge-container">
+    <div className="gauge-wrapper">
       <svg viewBox="0 0 200 120" className="gauge">
-        {/* Zones */}
         <path d="M 20 100 A 80 80 0 0 1 80 20" className="zone red" />
         <path d="M 80 20 A 80 80 0 0 1 120 20" className="zone orange" />
         <path d="M 120 20 A 80 80 0 0 1 180 100" className="zone green" />
 
-        {/* Needle */}
-        <g
-          className="needle"
-          transform={`rotate(${angle} 100 100)`}
-        >
+        <g transform={`rotate(${angle} 100 100)`}>
           <line
             x1="100"
             y1="100"
@@ -33,6 +26,5 @@ export function StatusGauge({ value = 0, min = 0, max = 100 }) {
         </g>
       </svg>
     </div>
-    
   );
 }

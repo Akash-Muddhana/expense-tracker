@@ -17,24 +17,23 @@ export function DashBoard() {
     const d = new Date(item.date);
 
     return (
-      d.getMonth() === now.getMonth() &&
-      d.getFullYear() === now.getFullYear()
+      d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
     );
   });
 
   const monthlyTotal = currentMonthExpenses.reduce(
     (sum, item) => sum + Number(item.amount),
-    0
+    0,
   );
 
   const monthlyUsedProperly = currentMonthExpenses.reduce(
     (sum, item) => sum + Number(item.rating >= 3 ? item.amount : 0),
-    0
+    0,
   );
 
   const monthlyWasted = currentMonthExpenses.reduce(
     (sum, item) => sum + Number(item.rating < 3 ? item.amount : 0),
-    0
+    0,
   );
 
   const monthlyDifferentiate = monthlyUsedProperly - monthlyWasted;
@@ -44,7 +43,6 @@ export function DashBoard() {
       <Header />
 
       <main className="DashBoard-main">
-
         <div className="top-bar">
           <div className="expense-button">
             <button
@@ -58,31 +56,26 @@ export function DashBoard() {
         </div>
 
         <div className="gauge-container">
-          <StatusGauge
-            value={monthlyDifferentiate}
-            min={monthlyTotal === 0 ? -1 : -monthlyTotal}
-            max={monthlyTotal === 0 ? 1 : monthlyTotal}
-          />
+          <div className="dashboard-gauge">
+            <StatusGauge
+              value={monthlyDifferentiate}
+              min={monthlyTotal === 0 ? -1 : -monthlyTotal}
+              max={monthlyTotal === 0 ? 1 : monthlyTotal}
+            />
+          </div>
         </div>
 
-        {expenses.length === 0 && (
-          <p className="no-expense">No expenses yet</p>
-        )}
+        {expenses.length === 0 && <p className="no-expense">No expenses yet</p>}
 
         <div className="stats-container">
-          <h3 className="stat-box">
-            Expenses This Month: ₹ {monthlyTotal}
-          </h3>
+          <h3 className="stat-box">Expenses This Month: ₹ {monthlyTotal}</h3>
 
-          <h3 className="stat-box wasted">
-            Wasted Money: ₹ {monthlyWasted}
-          </h3>
+          <h3 className="stat-box wasted">Wasted Money: ₹ {monthlyWasted}</h3>
 
           <h3 className="stat-box saved">
             Utilized Properly: ₹ {monthlyUsedProperly}
           </h3>
         </div>
-
       </main>
     </>
   );

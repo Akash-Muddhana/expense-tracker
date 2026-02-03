@@ -1,16 +1,16 @@
 .DashBoard-main {
-  position: relative;
   min-height: 100vh;
-}
-
-/* Button section */
-.expense-button {
-  position: absolute;
-  top: 7%;
-  right: 5%;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.expense-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
 }
 
 .new-expense-button {
@@ -20,26 +20,26 @@
   border: none;
   background-color: #116b98;
   color: white;
+  cursor: pointer;
 }
 
 .new-expense-text {
-  margin: 0;
+  margin: 0.3rem 0 0 0;
   font-size: 0.9rem;
 }
 
-/* Gauge */
-.gauge-container {
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translateX(-50%);
+.dashboard-gauge {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
 }
 
-/* Stats - desktop layout (your old style) */
-
 .stats-container {
-  position: absolute;
-  top: 55%;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
   width: 100%;
 }
 
@@ -47,74 +47,35 @@
   padding: 0.8rem 1rem;
   border-radius: 10px;
   font-size: 1.1rem;
-  position: absolute;
   min-width: 220px;
+  text-align: center;
 }
 
 .stat-box:nth-child(1) {
-  left: 10%;
   background: #f0f0f0;
 }
 
 .stat-box:nth-child(2) {
-  left: 40%;
   background: #ffe5e5;
 }
 
 .stat-box:nth-child(3) {
-  left: 70%;
   background: #e5ffe5;
 }
 
-/* ---------- MOBILE FIXES ---------- */
+.no-expense {
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  text-align: center;
+}
 
 @media (max-width: 768px) {
-
-  .expense-button {
-    position: static;
-    margin-top: 1rem;
-  }
-
-  .gauge-container {
-    position: static;
-    transform: none;
-    margin-top: 1rem;
-  }
-
   .stats-container {
-    position: static;
-    display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
-    margin-top: 1rem;
   }
 
   .stat-box {
-    position: static;
     width: 90%;
-    text-align: center;
   }
-  /* -------- MOBILE FIX FOR GAUGE OVERLAP -------- */
-
-@media (max-width: 600px) {
-
-  .gauge-container {
-    order: -1;            /* move gauge above stats */
-    margin-bottom: 1rem;
-  }
-
-  .stats-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  /* Force gauge to scale down */
-  .gauge-container svg {
-    width: 260px !important;
-    height: auto !important;
-  }
-}
-
 }

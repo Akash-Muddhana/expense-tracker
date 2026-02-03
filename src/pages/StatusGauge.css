@@ -1,8 +1,5 @@
-.gauge-container {
+.gauge-wrapper {
   width: 15rem;
-  position: absolute;
-  top: 20%;
-  left: 20%;
 }
 
 .gauge {
