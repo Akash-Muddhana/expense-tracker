@@ -19,6 +19,7 @@ export function NewExpense() {
       subCategory,
       rating,
       experience,
+        date: new Date().toISOString(),  
     };
     // 1. Get old data
     const oldExpenses = JSON.parse(localStorage.getItem("expenses")) || [];

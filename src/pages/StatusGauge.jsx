@@ -33,5 +33,6 @@ export function StatusGauge({ value = 0, min = 0, max = 100 }) {
         </g>
       </svg>
     </div>
+    
   );
 }

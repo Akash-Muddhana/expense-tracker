@@ -8,8 +8,8 @@
   flex-direction: column;
   align-items: center;
   position: absolute;
-  top: 2%;
-  left: 90%;
+  top: 7%;
+  left: 70%;
   
 }
 .new-expense-button {
@@ -19,9 +19,21 @@
   border: none;
   background-color: #116b98;
 }
-.totalExpenses{
+.monthlyExpenses{
   position: absolute;
   top: 45%;
   left: 22%;
+}
+.wastedmonthly{
+  position: absolute;
+  top: 60%;
+  left: 15%;
+  margin-right: 5rem;
+}
+.savedmonthly{
+  position: absolute;
+  top:60%;
+  left:35%;
+  margin-left: 5rem;
 }
 
