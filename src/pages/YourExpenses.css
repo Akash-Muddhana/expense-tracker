@@ -1,31 +1,132 @@
+h2 {
+  font-size: 1.8rem;
+  color: white;
+  text-align: center;
+  margin: 2rem auto 1.5rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .expenses-card {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 20px;
+  gap: 1rem;
+  padding: 1rem;
   align-items: center;
+  width: 100%;
 }
 
 .expense-card {
-  background-color: #E9BC8B;
-  border-radius: 1rem;
-  padding: 1rem;
-  margin: 0.5rem;
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
   width: 95%;
-  max-width: 500px;
+  max-width: 600px;
   height: auto;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border-left: 5px solid #667eea;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.expense-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+.expense-card h4 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.expense-card p {
+  margin: 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.expense-card button {
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
 }
 
 .del-button {
-  background-color: #DDD5F4;
+  background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
   border: none;
-  border-radius: 1rem;
-  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  padding: 0.6rem 1.2rem;
   cursor: pointer;
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-left: 0;
+}
+
+.del-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(245, 87, 108, 0.4);
+}
+
+.del-button:active {
+  transform: scale(0.98);
+}
+
+.expense-card button:not(.del-button) {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.expense-card button:not(.del-button):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
 }
 
 .totalExpenses,
 .wasted,
 .saved {
   text-align: center;
+  width: 95%;
+  max-width: 600px;
+  padding: 1.2rem;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+  margin: 0.8rem auto;
+  font-size: 1.1rem;
+}
+
+.totalExpenses {
+  color: #667eea;
+  border-left: 5px solid #667eea;
+}
+
+.wasted {
+  color: #e74c3c;
+  border-left: 5px solid #e74c3c;
+}
+
+.saved {
+  color: #27ae60;
+  border-left: 5px solid #27ae60;
+}
+
+@media (max-width: 768px) {
+  .expenses-card {
+    padding: 1rem;
+  }
+  
+  .expense-card {
+    width: 100%;
+  }
 }
