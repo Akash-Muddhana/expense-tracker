@@ -1,14 +1,9 @@
-#root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
+@layer components {
+  #root {
+    @apply flex flex-col min-h-screen bg-gradient-main;
+  }
 
-main {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 2rem 1rem;
+  main {
+    @apply flex-1 flex justify-center items-start p-8;
+  }
 }

@@ -1,4 +1,3 @@
-import "./DashBoard.css";
 import { StatusGauge } from "./StatusGauge";
 import { Header } from "../Components/Header";
 import { useNavigate } from "react-router-dom";
@@ -42,21 +41,21 @@ export function DashBoard() {
     <>
       <Header />
 
-      <main className="DashBoard-main">
-        <div className="top-bar">
-          <div className="expense-button">
-            <button
-              onClick={() => navigate("/NewExpense")}
-              className="new-expense-button"
-            >
-              <i className="fa-solid fa-plus"></i>
-            </button>
-            <h4 className="new-expense-text">Add new expense</h4>
-          </div>
+      <main className="w-full flex flex-col items-center min-h-calc-screen gap-8 py-8 px-4">
+        <div className="flex flex-col items-center gap-3">
+          <button
+            onClick={() => navigate("/NewExpense")}
+            className="w-14 h-14 rounded-full bg-gradient-primary text-white cursor-pointer text-2xl font-bold flex items-center justify-center shadow-lg hover:-translate-y-1 transition-all duration-300 active:-translate-y-0.5"
+          >
+            <span>+</span>
+          </button>
+          <h4 className="m-0 text-sm sm:text-base font-semibold text-white drop-shadow-md">
+            Add new expense
+          </h4>
         </div>
 
-        <div className="gauge-container">
-          <div className="dashboard-gauge">
+        <div className="w-full flex justify-center">
+          <div className="bg-white rounded-2xl shadow-soft p-8 flex justify-center">
             <StatusGauge
               value={monthlyDifferentiate}
               min={monthlyTotal === 0 ? -1 : -monthlyTotal}
@@ -65,16 +64,24 @@ export function DashBoard() {
           </div>
         </div>
 
-        {expenses.length === 0 && <p className="no-expense">No expenses yet</p>}
+        {expenses.length === 0 && (
+          <p className="mt-12 text-lg text-gray-300 text-center p-8 bg-white rounded-2xl shadow-soft min-w-[300px]">
+            No expenses yet
+          </p>
+        )}
 
-        <div className="stats-container">
-          <h3 className="stat-box">Expenses This Month: ₹ {monthlyTotal}</h3>
+        <div className="flex flex-col sm:flex-row justify-center gap-6 flex-wrap w-full px-4">
+          <div className="bg-gradient-primary text-white p-6 rounded-2xl font-semibold text-center min-w-[240px] shadow-soft hover:-translate-y-1 transition-all duration-300">
+            Expenses This Month: ₹ {monthlyTotal}
+          </div>
 
-          <h3 className="stat-box wasted">Wasted Money: ₹ {monthlyWasted}</h3>
+          <div className="bg-gradient-danger text-white p-6 rounded-2xl font-semibold text-center min-w-[240px] shadow-soft hover:-translate-y-1 transition-all duration-300">
+            Wasted Money: ₹ {monthlyWasted}
+          </div>
 
-          <h3 className="stat-box saved">
+          <div className="bg-gradient-success text-white p-6 rounded-2xl font-semibold text-center min-w-[240px] shadow-soft hover:-translate-y-1 transition-all duration-300">
             Utilized Properly: ₹ {monthlyUsedProperly}
-          </h3>
+          </div>
         </div>
       </main>
     </>

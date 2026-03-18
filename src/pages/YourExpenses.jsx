@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Header } from "../Components/Header";
-import "./YourExpenses.css";
 import { useNavigate } from "react-router-dom";
 
 export function YourExpenses() {
@@ -20,7 +19,6 @@ export function YourExpenses() {
 
   function deleteExpense(index) {
     const updated = expenses.filter((_, i) => i !== index);
-
     setExpenses(updated);
     localStorage.setItem("expenses", JSON.stringify(updated));
   }
@@ -30,33 +28,81 @@ export function YourExpenses() {
     <>
       <Header />
       
-      <h2>Your Expenses</h2>
-      <h3 className="totalExpenses">Your Total Expenses: ₹ {total}</h3>
-      
-      <h3 className="wasted">Wasted Money: ₹ {wasted}</h3>
-      <h3 className="saved">Utilized Properly: ₹ {usedProperly}</h3>
+      <main className="w-full flex flex-col items-center min-h-calc-screen py-8 px-4">
+        <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-8 drop-shadow-md">
+          Your Expenses
+        </h2>
 
-      <div className="expenses-card">
-        {expenses.length === 0 && <p>No expenses yet</p>}
-
-        {expenses.map((e, i) => (
-          <div key={i} className="expense-card">
-            <h4>{e.title}</h4>
-            <p>
-              {e.category} - {e.subCategory}
-            </p>
-            <p>amount : {e.amount}</p>
-            <p>Rating: {e.rating}</p>
-            <p>Experience : {e.experience}</p>
-            <p>Date: {new Date(e.date).toLocaleDateString()}</p>
-
-            <button onClick={() => deleteExpense(i)} className="del-button">
-              Delete
-            </button>
-            <button onClick={() => navigate(`/edit/${e.id}`)}>Edit</button>
+        <div className="flex flex-col sm:flex-row justify-center gap-4 flex-wrap w-full mb-8">
+          <div className="bg-white text-primary-500 p-4 rounded-xl font-semibold text-center min-w-[240px] shadow-soft border-l-4 border-primary-500">
+            Total: ₹ {total}
           </div>
-        ))}
-      </div>
+          <div className="bg-white text-danger-600 p-4 rounded-xl font-semibold text-center min-w-[240px] shadow-soft border-l-4 border-danger-600">
+            Wasted: ₹ {wasted}
+          </div>
+          <div className="bg-white text-success-500 p-4 rounded-xl font-semibold text-center min-w-[240px] shadow-soft border-l-4 border-success-500">
+            Utilized: ₹ {usedProperly}
+          </div>
+        </div>
+
+        <div className="w-full flex flex-col items-center gap-4">
+          {expenses.length === 0 && (
+            <p className="text-lg text-gray-300 text-center p-8 bg-white rounded-xl shadow-soft min-w-[300px]">
+              No expenses recorded yet. Start by adding your first expense! 📊
+            </p>
+          )}
+
+          {expenses.map((e, i) => (
+            <div
+              key={i}
+              className="bg-white rounded-xl shadow-soft p-5 w-full max-w-2xl border-l-4 border-primary-500 hover:-translate-y-1 transition-all duration-300"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                <div>
+                  <h4 className="text-lg font-bold text-gray-800 mb-1">
+                    {e.title}
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    {e.category} - {e.subCategory}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-2xl font-bold text-primary-600">
+                    ₹{e.amount}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {new Date(e.date).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-gray-50 rounded-lg p-3 mb-4">
+                <p className="text-sm text-gray-700">
+                  <span className="font-semibold">Rating:</span> {e.rating}/5 ⭐
+                </p>
+                <p className="text-sm text-gray-700 mt-1">
+                  <span className="font-semibold">Feedback:</span> {e.experience}
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => deleteExpense(i)}
+                  className="flex-1 bg-gradient-danger text-white py-2 rounded-lg font-semibold hover:shadow-md hover:scale-105 active:scale-95 transition-all"
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => navigate(`/edit/${e.id}`)}
+                  className="flex-1 bg-gradient-primary text-white py-2 rounded-lg font-semibold hover:shadow-md hover:scale-105 active:scale-95 transition-all"
+                >
+                  Edit
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </main>
     </>
   );
 }
