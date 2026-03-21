@@ -1,43 +1,45 @@
 import { Header } from "../Components/Header";
 import { useState } from "react";
-
+import { addNewExpense } from "../../services/itemService";
 export function NewExpense() {
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [rating, setRating] = useState(0);
   const [title, setTitle] = useState("");
   const [experience, setExperience] = useState("");
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState("");
   
-  function saveExpenses() {
-    const newExpense = {
-      id: Date.now(),
-      amount,
+ const saveExpenses = async () => {
+
+
+  try {
+    console.log("before api");
+
+    await addNewExpense(
       title,
+      Number(amount),
       category,
       subCategory,
       rating,
-      experience,
-        date: new Date().toISOString(),  
-    };
-    // 1. Get old data
-    const oldExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+      experience
+    );
 
-    // 2. Add new one
-    const updatedExpenses = [...oldExpenses, newExpense];
-
-    // 3. Save back
-    localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
 
     alert("Saved!");
+   
 
-    // Optional: clear form
     setTitle("");
     setCategory("");
     setSubCategory("");
     setRating(0);
     setExperience("");
+    setAmount("");
+
+  } catch (err) {
+    console.error("ERROR:", err);
+    alert("Failed to save");
   }
+};
 
   const categoryMap = {
     Essentials: ["Food", "Rent", "Transport", "Mobile", "Electricity"],
@@ -78,7 +80,7 @@ export function NewExpense() {
                 placeholder="Enter amount"
                 type="number"
                 value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
+                onChange={(e) => setAmount(e.target.value)}
                 className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:bg-primary-50 transition-all"
               />
             </div>
