@@ -1,11 +1,22 @@
-import { useState } from "react";
+import { useState,useEffect} from "react";
 import { Header } from "../Components/Header";
 import { useNavigate } from "react-router-dom";
-
+import { getSavedExpenses } from "../../services/itemService";
 export function YourExpenses() {
-  const [expenses, setExpenses] = useState(() => {
-    return JSON.parse(localStorage.getItem("expenses")) || [];
-  });
+  const [expenses, setExpenses] = useState([])
+  useEffect(()=>{
+    async function fetchData() {
+      try{
+      const items=await getSavedExpenses()
+      setExpenses(items)
+      }
+      catch(err){
+        console.log(err)
+      } 
+    }
+    fetchData()
+  },[])
+ 
 
   const total = expenses.reduce((sum, item) => sum + Number(item.amount), 0);
   const usedProperly = expenses.reduce(

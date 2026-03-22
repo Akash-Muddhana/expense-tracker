@@ -12,7 +12,8 @@ function App() {
         <Route path="/" element={<DashBoard />} />
         <Route path="/NewExpense" element={<NewExpense />} />
         <Route path="/YourExpenses" element={<YourExpenses />} />
-        <Route path="/EditExpenses" element={<EditExpenses />} />
+        <Route path="/EditExpenses" element={<YourExpenses />} />
+        <Route path="/EditExpenses/:id" element={<EditExpenses />} />
         <Route path="/edit/:id" element={<EditExpenses />} />
       </Routes>
     </>

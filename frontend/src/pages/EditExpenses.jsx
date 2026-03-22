@@ -1,35 +1,59 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Header } from "../Components/Header";
-
+import { editExpenseItem,expenseItemById} from "../../services/itemService";
 export function EditExpenses() {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const navigate=useNavigate()
+  const [expenses,setExpenses]=useState(null)
+ useEffect(() => {
+  async function fetchItems() {
+    try {
+      const items = await expenseItemById(id);
+      setExpenses(items);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  fetchItems();
+}, [id]);
+  
+  
 
-  const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-  const expense = expenses.find((e) => e.id == id);
+  const [title, setTitle] = useState("");
+const [category, setCategory] = useState("");
+const [subCategory, setSubCategory] = useState("");
+const [rating, setRating] = useState(0);
+const [experience, setExperience] = useState("");
+const [amount, setAmount] = useState("");
+useEffect(() => {
+  if (expenses) {
+    setTitle(expenses.title);
+    setCategory(expenses.category);
+    setSubCategory(expenses.subCategory);
+    setRating(expenses.rating);
+    setExperience(expenses.experience);
+    setAmount(expenses.amount);
+  }
+}, [expenses]);
+async function updateExpense() {
+  try {
+    await editExpenseItem(id, {
+      title,
+      category,
+      subCategory,
+      rating,
+      experience,
+      amount,
+    });
 
-  const [title, setTitle] = useState(expense?.title || "");
-  const [category, setCategory] = useState(expense?.category || "");
-  const [subCategory, setSubCategory] = useState(expense?.subCategory || "");
-  const [rating, setRating] = useState(expense?.rating || 0);
-  const [experience, setExperience] = useState(expense?.experience || "");
-  const [amount, setAmount] = useState(expense?.amount || "");
-
-  function updateExpense() {
-    const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-
-    const updated = expenses.map((e) =>
-      e.id == id
-        ? { ...e, title, category, subCategory, rating, experience, amount }
-        : e,
-    );
-
-    localStorage.setItem("expenses", JSON.stringify(updated));
     alert("Expense Updated!");
     navigate("/YourExpenses");
+  } catch (err) {
+    console.error(err);
+    alert("Update failed");
   }
-
+}
   const categoryMap = {
     Essentials: ["Food", "Rent", "Transport", "Mobile", "Electricity"],
     Lifestyle: ["Snacks", "Entertainment", "Shopping", "Subscriptions"],
@@ -38,7 +62,9 @@ export function EditExpenses() {
     Emergency: ["Repairs", "Gifts", "Family Help"],
     Savings: ["Savings", "Investments", "Emergency Fund"],
   };
-
+if (!expenses) {
+  return <p>Loading...</p>;
+}
   return (
     <>
       <Header />

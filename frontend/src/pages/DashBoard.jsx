@@ -1,24 +1,37 @@
 import { StatusGauge } from "./StatusGauge";
 import { Header } from "../Components/Header";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-
+import { useState,useEffect} from "react";
+import { getSavedExpenses } from "../../services/itemService";
 export function DashBoard() {
   const navigate = useNavigate();
 
-  const [expenses] = useState(() => {
-    return JSON.parse(localStorage.getItem("expenses")) || [];
-  });
+   const [expenses, setExpenses] = useState([])
+    useEffect(()=>{
+      async function fetchData() {
+        try{
+        const items=await getSavedExpenses()
+        setExpenses(items)
+        }
+        catch(err){
+          console.log(err)
+        } 
+      }
+      fetchData()
+    },[])
 
   const now = new Date();
 
-  const currentMonthExpenses = expenses.filter((item) => {
-    const d = new Date(item.date);
+ const currentMonthExpenses = expenses.filter((item) => {
+  if (!item.date) return false;
 
-    return (
-      d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
-    );
-  });
+  const d = new Date(item.date);
+
+  return (
+    d.getUTCMonth() === now.getUTCMonth() &&
+    d.getUTCFullYear() === now.getUTCFullYear()
+  );
+});
 
   const monthlyTotal = currentMonthExpenses.reduce(
     (sum, item) => sum + Number(item.amount),
