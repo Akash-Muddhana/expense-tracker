@@ -1,49 +1,48 @@
-
- export const addNewExpense = async (
+export const addNewExpense = async (
   title,
   amount,
   category,
   subCategory,
   rating,
+  email,
   experience,
 ) => {
-  const response = await fetch(
-    "http://localhost:3000/api/expense/NewExpense",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title,
-        amount,
-        category,
-        subCategory,
-        rating,
-        experience,
-      }),
+  const response = await fetch("http://localhost:3000/api/expense/NewExpense", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );if (!response.ok) {
-  throw new Error("Request failed");
-}
+    credentials: "include",
+    body: JSON.stringify({
+      title,
+      amount,
+      category,
+      subCategory,
+      rating,
+
+      experience,
+    }),
+  });
+  if (!response.ok) {
+    throw new Error("Request failed");
+  }
   const item = await response.json();
   return mapServerToLocalItem(item);
 };
- export const getSavedExpenses=async()=>{
-  
+export const getSavedExpenses = async () => {
   const response = await fetch(
     "http://localhost:3000/api/expense/YourExpenses",
     {
       method: "GET",
+      credentials: "include",
     },
   );
   if (!response.ok) {
-  throw new Error("Request failed");
-}
-  const items=await response.json()
-  return items.map(mapServerToLocalItem)
-  
- }
+    throw new Error("Request failed");
+  }
+  const items = await response.json();
+  return items.map(mapServerToLocalItem);
+};
 export const editExpenseItem = async (id, updatedData) => {
   const response = await fetch(
     `http://localhost:3000/api/expense/EditExpenses/${id}`,
@@ -52,29 +51,31 @@ export const editExpenseItem = async (id, updatedData) => {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(updatedData),
     },
   );
-if (!response.ok) {
-  throw new Error("Request failed");
-}
+  if (!response.ok) {
+    throw new Error("Request failed");
+  }
   const item = await response.json();
   return mapServerToLocalItem(item);
 };
- export const expenseItemById=async(id)=>{
+export const expenseItemById = async (id) => {
   const response = await fetch(
     `http://localhost:3000/api/expense/YourExpenses/${id}`,
     {
       method: "GET",
-      
+      credentials: "include",
     },
-    
-  );if (!response.ok) {
-  throw new Error("Request failed");
-}
-  const items=await response.json()
-  return mapServerToLocalItem(items) 
- }
+  );
+  if (!response.ok) {
+    throw new Error("Request failed");
+  }
+  const items = await response.json();
+  return mapServerToLocalItem(items);
+};
+
 const mapServerToLocalItem = (serveritem) => {
   console.log(serveritem);
   return {
@@ -85,6 +86,7 @@ const mapServerToLocalItem = (serveritem) => {
     subCategory: serveritem.subCategory,
     rating: serveritem.rating,
     experience: serveritem.experience,
+
     date: serveritem.date,
   };
 };
