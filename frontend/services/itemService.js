@@ -23,9 +23,11 @@ export const addNewExpense = async (
       experience,
     }),
   });
-  if (!response.ok) {
-    throw new Error("Request failed");
-  }
+if (!response.ok) {
+  const errorData = await response.json();
+  console.error("Backend error:", errorData);
+  throw new Error(errorData.message || "Request failed");
+}
   const item = await response.json();
   return mapServerToLocalItem(item);
 };
@@ -37,9 +39,11 @@ export const getSavedExpenses = async () => {
       credentials: "include",
     },
   );
-  if (!response.ok) {
-    throw new Error("Request failed");
-  }
+ if (!response.ok) {
+  const errorData = await response.json();
+  console.error("Backend error:", errorData);
+  throw new Error(errorData.message || "Request failed");
+}
   const items = await response.json();
   return items.map(mapServerToLocalItem);
 };
@@ -55,9 +59,11 @@ export const editExpenseItem = async (id, updatedData) => {
       body: JSON.stringify(updatedData),
     },
   );
-  if (!response.ok) {
-    throw new Error("Request failed");
-  }
+if (!response.ok) {
+  const errorData = await response.json();
+  console.error("Backend error:", errorData);
+  throw new Error(errorData.message || "Request failed");
+}
   const item = await response.json();
   return mapServerToLocalItem(item);
 };
@@ -69,9 +75,11 @@ export const expenseItemById = async (id) => {
       credentials: "include",
     },
   );
-  if (!response.ok) {
-    throw new Error("Request failed");
-  }
+if (!response.ok) {
+  const errorData = await response.json();
+  console.error("Backend error:", errorData);
+  throw new Error(errorData.message || "Request failed");
+}
   const items = await response.json();
   return mapServerToLocalItem(items);
 };

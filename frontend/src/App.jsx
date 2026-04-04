@@ -6,6 +6,7 @@ import { YourExpenses } from "./pages/YourExpenses";
 import { EditExpenses } from "./pages/EditExpenses";
 import { Login } from "./pages/login";
 import { useState } from "react";
+import {Signup} from "./pages/signup"
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -65,6 +66,12 @@ function App() {
           path="/login"
           element={
             <Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <Signup  />
           }
         />
       </Routes>
