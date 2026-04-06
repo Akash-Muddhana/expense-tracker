@@ -27,7 +27,7 @@ function App() {
           }
         />
         <Route
-          path="/YourExpenses"
+          path="/expenses"
           element={
             <YourExpenses
               isLoggedIn={isLoggedIn}

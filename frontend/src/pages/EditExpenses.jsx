@@ -3,10 +3,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Header } from "../Components/Header";
 import { editExpenseItem, expenseItemById } from "../../services/itemService";
+
+
 export function EditExpenses({ isLoggedIn, setIsLoggedIn }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [expenses, setExpenses] = useState(null);
+  const API = import.meta.env.VITE_API_URL || "";
   useEffect(() => {
     async function fetchItems() {
       try {
@@ -47,7 +50,7 @@ export function EditExpenses({ isLoggedIn, setIsLoggedIn }) {
       });
 
       alert("Expense Updated!");
-      navigate("/YourExpenses");
+      navigate("/expenses");
     } catch (err) {
       console.error(err);
       alert("Update failed");
@@ -61,14 +64,14 @@ export function EditExpenses({ isLoggedIn, setIsLoggedIn }) {
     Emergency: ["Repairs", "Gifts", "Family Help"],
     Savings: ["Savings", "Investments", "Emergency Fund"],
   };
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/auth/auth-check", {
-        withCredentials: true,
-      })
-      .then(() => setIsLoggedIn(true))
-      .catch(() => setIsLoggedIn(false));
-  }, []);
+ useEffect(() => {
+  axios
+    .get(`${API}/api/auth/auth-check`, {
+      withCredentials: true,
+    })
+    .then(() => setIsLoggedIn(true))
+    .catch(() => setIsLoggedIn(false));
+}, []);
   if (!expenses) {
     return <p>Loading...</p>;
   }

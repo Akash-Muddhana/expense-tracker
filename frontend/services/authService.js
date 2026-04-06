@@ -1,35 +1,40 @@
-export const newUser = async (firstName,secondName,email, password) => {
-  const response = await fetch("http://localhost:3000/api/auth/signup", {
+// ✅ SIGNUP
+const API = import.meta.env.VITE_API_URL || "";
+
+export const newUser = async (firstName, secondName, email, password) => {
+  const response = await fetch(`${API}/api/auth/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify({firstName,secondName, email, password }),
+    body: JSON.stringify({ firstName, secondName, email, password }),
   });
 
   const data = await response.json();
 
   if (!response.ok) {
-    throw data; 
+    throw data;
   }
 
   return data;
 };
-export const login= async (email,password) => {
-  const response = await fetch("http://localhost:3000/api/auth/Login", {
+
+// ✅ LOGIN
+export const login = async (email, password) => {
+  const response = await fetch(`${API}/api/auth/login`, { // ✅ lowercase
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify({email,password}),
+    body: JSON.stringify({ email, password }),
   });
 
   const data = await response.json();
 
   if (!response.ok) {
-    throw data; 
+    throw data;
   }
 
   return data;

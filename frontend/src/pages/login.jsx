@@ -7,15 +7,16 @@ export function Login({ isLoggedIn, setIsLoggedIn }) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const API = import.meta.env.VITE_API_URL || "";
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/auth/auth-check", {
-        withCredentials: true,
-      })
-      .then(() => setIsLoggedIn(true))
-      .catch(() => setIsLoggedIn(false));
-  }, [setIsLoggedIn]);
+useEffect(() => {
+  axios
+    .get(`${API}/api/auth/auth-check`, {
+      withCredentials: true,
+    })
+    .then(() => setIsLoggedIn(true))
+    .catch(() => setIsLoggedIn(false));
+}, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

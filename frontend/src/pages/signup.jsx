@@ -10,7 +10,7 @@ export function Signup() {
   const [errors, setErrors] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
-
+  const API = import.meta.env.VITE_API_URL || "";
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();

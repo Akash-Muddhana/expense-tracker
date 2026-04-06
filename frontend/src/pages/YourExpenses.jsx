@@ -3,6 +3,7 @@ import axios from "axios";
 import { Header } from "../Components/Header";
 import { useNavigate } from "react-router-dom";
 import { getSavedExpenses } from "../../services/itemService";
+import { deleteExpenseItem } from "../../services/itemService";
 export function YourExpenses({ isLoggedIn, setIsLoggedIn }) {
   const [expenses, setExpenses] = useState([]);
   useEffect(() => {
@@ -16,7 +17,7 @@ export function YourExpenses({ isLoggedIn, setIsLoggedIn }) {
     }
     fetchData();
   }, []);
-
+  const API = import.meta.env.VITE_API_URL || "";
   const total = expenses.reduce((sum, item) => sum + Number(item.amount), 0);
   const usedProperly = expenses.reduce(
     (sum, item) => sum + Number(item.rating >= 3 ? item.amount : 0),
@@ -35,7 +36,7 @@ export function YourExpenses({ isLoggedIn, setIsLoggedIn }) {
   const navigate = useNavigate();
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/auth/auth-check", {
+      .get(`${API}/api/auth/auth-check`, {
         withCredentials: true,
       })
       .then(() => setIsLoggedIn(true))
@@ -105,7 +106,16 @@ export function YourExpenses({ isLoggedIn, setIsLoggedIn }) {
 
                 <div className="flex gap-3">
                   <button
-                    onClick={() => deleteExpense(i)}
+                    onClick={async () => {
+                      try {
+                        await deleteExpenseItem(e.id);
+                        setExpenses((prev) =>
+                          prev.filter((item) => item.id !== e.id),
+                        );
+                      } catch (err) {
+                        console.error(err);
+                      }
+                    }}
                     className="flex-1 bg-gradient-danger text-white py-2 rounded-lg font-semibold hover:shadow-md hover:scale-105 active:scale-95 transition-all"
                   >
                     Delete

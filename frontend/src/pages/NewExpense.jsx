@@ -8,6 +8,7 @@ export function NewExpense({ isLoggedIn, setIsLoggedIn }) {
   const [title, setTitle] = useState("");
   const [experience, setExperience] = useState("");
   const [amount, setAmount] = useState("");
+  const API = import.meta.env.VITE_API_URL || "";
   const saveExpenses = async () => {
     try {
       console.log("before api");
@@ -45,13 +46,13 @@ export function NewExpense({ isLoggedIn, setIsLoggedIn }) {
     Savings: ["Savings", "Investments", "Emergency Fund"],
   };
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/auth/auth-check", {
-        withCredentials: true,
-      })
-      .then(() => setIsLoggedIn(true))
-      .catch(() => setIsLoggedIn(false));
-  }, []);
+  axios
+    .get(`${API}/api/auth/auth-check`, {
+      withCredentials: true,
+    })
+    .then(() => setIsLoggedIn(true))
+    .catch(() => setIsLoggedIn(false));
+}, []);
   return (
     <>
       {isLoggedIn ? (

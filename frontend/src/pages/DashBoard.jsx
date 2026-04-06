@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getSavedExpenses } from "../../services/itemService";
 import axios from "axios";
+const API = import.meta.env.VITE_API_URL || "";
+
 export function DashBoard({ isLoggedIn, setIsLoggedIn }) {
   const navigate = useNavigate();
 
@@ -20,14 +22,14 @@ export function DashBoard({ isLoggedIn, setIsLoggedIn }) {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/auth/auth-check", {
-        withCredentials: true,
-      })
-      .then(() => setIsLoggedIn(true))
-      .catch(() => setIsLoggedIn(false));
-  }, []);
+useEffect(() => {
+  axios
+    .get(`${API}/api/auth/auth-check`, {
+      withCredentials: true,
+    })
+    .then(() => setIsLoggedIn(true))
+    .catch(() => setIsLoggedIn(false));
+}, []);
 
   const now = new Date();
 
