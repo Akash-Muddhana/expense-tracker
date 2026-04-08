@@ -1,15 +1,15 @@
 import { NavLink } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
-const API = import.meta.env.VITE_API_URL || "";
+const API = import.meta.env.VITE_API_URL;
+if (!API) throw new Error("Missing API URL");
 export function Header({ isLoggedIn, setIsLoggedIn }) {
-
   const handleLogout = async () => {
     try {
       await axios.post(
         `${API}/api/auth/logout`, // ✅ fixed
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setIsLoggedIn(false);
     } catch (err) {
@@ -18,13 +18,13 @@ export function Header({ isLoggedIn, setIsLoggedIn }) {
   };
 
   useEffect(() => {
-    axios
-      .get("/api/auth/auth-check", { // ✅ fixed
-        withCredentials: true,
-      })
-      .then(() => setIsLoggedIn(true))
-      .catch(() => setIsLoggedIn(false));
-  }, []);
+  axios
+    .get(`${API}/api/auth/auth-check`, {
+      withCredentials: true,
+    })
+    .then(() => setIsLoggedIn(true))
+    .catch(() => setIsLoggedIn(false));
+}, []);
 
   return (
     <header className="sticky top-0 z-50 bg-gradient-header shadow-lg">
@@ -34,8 +34,6 @@ export function Header({ isLoggedIn, setIsLoggedIn }) {
             <NavLink to="/">Home</NavLink>
 
             <NavLink to="/expenses">Your Expenses</NavLink>
-
-        
 
             <button onClick={handleLogout}>Logout</button>
           </>

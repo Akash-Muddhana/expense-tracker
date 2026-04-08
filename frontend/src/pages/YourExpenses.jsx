@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Header } from "../Components/Header";
 import { useNavigate } from "react-router-dom";
 import { getSavedExpenses } from "../../services/itemService";
 import { deleteExpenseItem } from "../../services/itemService";
@@ -17,7 +16,8 @@ export function YourExpenses({ isLoggedIn, setIsLoggedIn }) {
     }
     fetchData();
   }, []);
-  const API = import.meta.env.VITE_API_URL || "";
+  const API = import.meta.env.VITE_API_URL;
+  if (!API) throw new Error("Missing API URL");
   const total = expenses.reduce((sum, item) => sum + Number(item.amount), 0);
   const usedProperly = expenses.reduce(
     (sum, item) => sum + Number(item.rating >= 3 ? item.amount : 0),
@@ -28,11 +28,6 @@ export function YourExpenses({ isLoggedIn, setIsLoggedIn }) {
     0,
   );
 
-  function deleteExpense(index) {
-    const updated = expenses.filter((_, i) => i !== index);
-    setExpenses(updated);
-    localStorage.setItem("expenses", JSON.stringify(updated));
-  }
   const navigate = useNavigate();
   useEffect(() => {
     axios
@@ -71,7 +66,7 @@ export function YourExpenses({ isLoggedIn, setIsLoggedIn }) {
 
             {expenses.map((e, i) => (
               <div
-                key={i}
+                key={e.id}
                 className="bg-white rounded-xl shadow-soft p-5 w-full max-w-2xl border-l-4 border-primary-500 hover:-translate-y-1 transition-all duration-300"
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">

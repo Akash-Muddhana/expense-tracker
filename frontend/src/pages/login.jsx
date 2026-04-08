@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { login } from "../../services/authService";
 export function Login({ isLoggedIn, setIsLoggedIn }) {
@@ -7,16 +7,17 @@ export function Login({ isLoggedIn, setIsLoggedIn }) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const API = import.meta.env.VITE_API_URL || "";
-
-useEffect(() => {
-  axios
-    .get(`${API}/api/auth/auth-check`, {
-      withCredentials: true,
-    })
-    .then(() => setIsLoggedIn(true))
-    .catch(() => setIsLoggedIn(false));
-}, []);
+  const API = import.meta.env.VITE_API_URL;
+  if (!API) throw new Error("Missing API URL");
+  const navigate = useNavigate();
+  useEffect(() => {
+    axios
+      .get(`${API}/api/auth/auth-check`, {
+        withCredentials: true,
+      })
+      .then(() => setIsLoggedIn(true))
+      .catch(() => setIsLoggedIn(false));
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,6 +26,7 @@ useEffect(() => {
     try {
       await login(email, password);
       setIsLoggedIn(true);
+      navigate("/");
     } catch (err) {
       console.error("error while adding user", err);
       setError("Login failed. Please check your credentials.");

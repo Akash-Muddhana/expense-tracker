@@ -1,35 +1,34 @@
 import { StatusGauge } from "./StatusGauge";
-import { Header } from "../Components/Header";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getSavedExpenses } from "../../services/itemService";
 import axios from "axios";
-const API = import.meta.env.VITE_API_URL || "";
-
+const API = import.meta.env.VITE_API_URL;
+if (!API) throw new Error("Missing API URL");
 export function DashBoard({ isLoggedIn, setIsLoggedIn }) {
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(true);
   const [expenses, setExpenses] = useState([]);
   useEffect(() => {
-    async function fetchData() {
+    async function init() {
       try {
+        await axios.get(`${API}/api/auth/auth-check`, {
+          withCredentials: true,
+        });
+
+        setIsLoggedIn(true);
+
         const items = await getSavedExpenses();
         setExpenses(items);
-      } catch (err) {
-        console.log(err);
+      } catch {
+        setIsLoggedIn(false);
+      } finally {
+        setLoading(false);
       }
     }
-    fetchData();
-  }, []);
 
-useEffect(() => {
-  axios
-    .get(`${API}/api/auth/auth-check`, {
-      withCredentials: true,
-    })
-    .then(() => setIsLoggedIn(true))
-    .catch(() => setIsLoggedIn(false));
-}, []);
+    init();
+  }, []);
 
   const now = new Date();
 

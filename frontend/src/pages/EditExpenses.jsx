@@ -1,25 +1,35 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Header } from "../Components/Header";
 import { editExpenseItem, expenseItemById } from "../../services/itemService";
 
-
 export function EditExpenses({ isLoggedIn, setIsLoggedIn }) {
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const navigate = useNavigate();
   const [expenses, setExpenses] = useState(null);
-  const API = import.meta.env.VITE_API_URL || "";
+  const API = import.meta.env.VITE_API_URL;
+  if (!API) throw new Error("Missing API URL");
   useEffect(() => {
-    async function fetchItems() {
+    async function init() {
       try {
-        const items = await expenseItemById(id);
-        setExpenses(items);
-      } catch (err) {
-        console.error(err);
+        await axios.get(`${API}/api/auth/auth-check`, {
+          withCredentials: true,
+        });
+
+        setIsLoggedIn(true);
+
+        const item = await expenseItemById(id);
+        if (!item) throw new Error("Invalid expense data");
+        setExpenses(item);
+      } catch {
+        setIsLoggedIn(false);
+      } finally {
+        setLoading(false); // ✅ HERE
       }
     }
-    fetchItems();
+
+    init();
   }, [id]);
 
   const [title, setTitle] = useState("");
@@ -28,6 +38,7 @@ export function EditExpenses({ isLoggedIn, setIsLoggedIn }) {
   const [rating, setRating] = useState(0);
   const [experience, setExperience] = useState("");
   const [amount, setAmount] = useState("");
+
   useEffect(() => {
     if (expenses) {
       setTitle(expenses.title);
@@ -64,15 +75,8 @@ export function EditExpenses({ isLoggedIn, setIsLoggedIn }) {
     Emergency: ["Repairs", "Gifts", "Family Help"],
     Savings: ["Savings", "Investments", "Emergency Fund"],
   };
- useEffect(() => {
-  axios
-    .get(`${API}/api/auth/auth-check`, {
-      withCredentials: true,
-    })
-    .then(() => setIsLoggedIn(true))
-    .catch(() => setIsLoggedIn(false));
-}, []);
-  if (!expenses) {
+
+  if (loading) {
     return <p>Loading...</p>;
   }
 

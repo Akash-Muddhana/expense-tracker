@@ -1,5 +1,22 @@
 // ✅ ADD NEW EXPENSE
-const API = import.meta.env.VITE_API_URL || "";
+const API = import.meta.env.VITE_API_URL;
+if (!API) throw new Error("Missing API URL");
+const handleResponse = async (response) => {
+  let data;
+
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error("Invalid server response");
+  }
+
+  if (!response.ok) {
+    console.error("Backend error:", data);
+    throw new Error(data.message || "Request failed");
+  }
+
+  return data;
+};
 export const addNewExpense = async (
   title,
   amount,
@@ -7,7 +24,7 @@ export const addNewExpense = async (
   subCategory,
   rating,
   email,
-  experience
+  experience,
 ) => {
   const response = await fetch(`${API}/api/expense/NewExpense`, {
     method: "POST",
@@ -24,15 +41,8 @@ export const addNewExpense = async (
       experience,
     }),
   });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    console.error("Backend error:", errorData);
-    throw new Error(errorData.message || "Request failed");
-  }
-
-  const item = await response.json();
-  return mapServerToLocalItem(item);
+  const data = await handleResponse(response);
+  return mapServerToLocalItem(data);
 };
 
 // ✅ GET ALL EXPENSES
@@ -41,15 +51,8 @@ export const getSavedExpenses = async () => {
     method: "GET",
     credentials: "include",
   });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    console.error("Backend error:", errorData);
-    throw new Error(errorData.message || "Request failed");
-  }
-
-  const items = await response.json();
-  return items.map(mapServerToLocalItem);
+  const data = await handleResponse(response);
+  return data.map(mapServerToLocalItem);
 };
 
 // ✅ EDIT EXPENSE
@@ -62,15 +65,8 @@ export const editExpenseItem = async (id, updatedData) => {
     credentials: "include",
     body: JSON.stringify(updatedData),
   });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    console.error("Backend error:", errorData);
-    throw new Error(errorData.message || "Request failed");
-  }
-
-  const item = await response.json();
-  return mapServerToLocalItem(item);
+  const data = await handleResponse(response);
+  return mapServerToLocalItem(data);
 };
 
 // ✅ GET BY ID
@@ -80,18 +76,12 @@ export const expenseItemById = async (id) => {
     credentials: "include",
   });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    console.error("Backend error:", errorData);
-    throw new Error(errorData.message || "Request failed");
-  }
-
-  const item = await response.json();
-  return mapServerToLocalItem(item);
+  const data = await handleResponse(response);
+  return mapServerToLocalItem(data);
 };
 
 const mapServerToLocalItem = (serveritem) => {
-  console.log(serveritem);
+  if (!serveritem) throw new Error("Invalid server data");
   return {
     id: serveritem._id,
     title: serveritem.title,
@@ -110,7 +100,5 @@ export const deleteExpenseItem = async (id) => {
     credentials: "include",
   });
 
-  if (!response.ok) {
-    throw new Error("Delete failed");
-  }
+  await handleResponse(response);
 };

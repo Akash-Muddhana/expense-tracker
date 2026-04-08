@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { newUser } from "../../services/authService";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 export function Signup() {
   const [firstName, setFirstName] = useState("");
   const [secondName, setSecondName] = useState("");
@@ -10,7 +10,8 @@ export function Signup() {
   const [errors, setErrors] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
-  const API = import.meta.env.VITE_API_URL || "";
+  const API = import.meta.env.VITE_API_URL;
+  if (!API) throw new Error("Missing API URL");
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +22,7 @@ export function Signup() {
     if (!firstName.trim()) errs.push("First name is required.");
     if (!email.trim()) errs.push("Email is required.");
     if (password.length < 4)
-      errs.push("Password must be at least 6 characters.");
+      errs.push("Password must be at least 4 characters.");
     if (password !== confirmPassword) errs.push("Passwords do not match.");
 
     if (errs.length) {
@@ -41,7 +42,7 @@ export function Signup() {
       setPassword("");
       setConfirmPassword("");
     } catch (err) {
-      setErrors([err.message || "Signup failed"]);
+      setErrors([err?.message || "Signup failed"]);
     } finally {
       setSubmitting(false);
     }
@@ -274,9 +275,9 @@ export function Signup() {
 
         <p className="text-center text-sm text-gray-500">
           Already have an account?{" "}
-          <a className="text-blue-600 hover:underline" href="/login">
+          <NavLink className="text-blue-600 hover:underline" to="/login">
             Sign in
-          </a>
+          </NavLink>
         </p>
       </form>
     </div>
