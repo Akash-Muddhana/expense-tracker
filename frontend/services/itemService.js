@@ -1,4 +1,3 @@
-// ✅ ADD NEW EXPENSE
 const API = import.meta.env.VITE_API_URL;
 if (!API) throw new Error("Missing API URL");
 const handleResponse = async (response) => {
@@ -45,7 +44,6 @@ export const addNewExpense = async (
   return mapServerToLocalItem(data);
 };
 
-// ✅ GET ALL EXPENSES
 export const getSavedExpenses = async () => {
   const response = await fetch(`${API}/api/expense/YourExpenses`, {
     method: "GET",
@@ -55,7 +53,6 @@ export const getSavedExpenses = async () => {
   return data.map(mapServerToLocalItem);
 };
 
-// ✅ EDIT EXPENSE
 export const editExpenseItem = async (id, updatedData) => {
   const response = await fetch(`${API}/api/expense/EditExpenses/${id}`, {
     method: "PUT",
@@ -69,7 +66,6 @@ export const editExpenseItem = async (id, updatedData) => {
   return mapServerToLocalItem(data);
 };
 
-// ✅ GET BY ID
 export const expenseItemById = async (id) => {
   const response = await fetch(`${API}/api/expense/YourExpenses/${id}`, {
     method: "GET",

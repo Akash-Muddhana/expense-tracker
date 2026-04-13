@@ -7,7 +7,7 @@ export function Header({ isLoggedIn, setIsLoggedIn }) {
   const handleLogout = async () => {
     try {
       await axios.post(
-        `${API}/api/auth/logout`, // ✅ fixed
+        `${API}/api/auth/logout`, 
         {},
         { withCredentials: true },
       );

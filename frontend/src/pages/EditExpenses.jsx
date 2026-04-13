@@ -25,7 +25,7 @@ export function EditExpenses({ isLoggedIn, setIsLoggedIn }) {
       } catch {
         setIsLoggedIn(false);
       } finally {
-        setLoading(false); // ✅ HERE
+        setLoading(false); 
       }
     }
 

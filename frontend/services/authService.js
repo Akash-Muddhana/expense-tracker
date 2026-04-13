@@ -1,4 +1,4 @@
-// ✅ SIGNUP
+
 const API = import.meta.env.VITE_API_URL;
 
 if (!API) {
@@ -28,10 +28,8 @@ export const newUser = async (firstName, secondName, email, password) => {
   return data;
 };
 
-// ✅ LOGIN
 export const login = async (email, password) => {
   const response = await fetch(`${API}/api/auth/login`, {
-    // ✅ lowercase
     method: "POST",
     headers: {
       "Content-Type": "application/json",
