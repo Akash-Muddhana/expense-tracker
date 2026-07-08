@@ -30,10 +30,13 @@ export function YourExpenses({ isLoggedIn, setIsLoggedIn }) {
 
   const navigate = useNavigate();
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    const authHeaders = token
+      ? { headers: { Authorization: `Bearer ${token}` } }
+      : {};
+
     axios
-      .get(`${API}/api/auth/auth-check`, {
-        withCredentials: true,
-      })
+      .get(`${API}/api/auth/auth-check`, authHeaders)
       .then(() => setIsLoggedIn(true))
       .catch(() => setIsLoggedIn(false));
   }, []);

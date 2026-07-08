@@ -1,4 +1,10 @@
 const API = import.meta.env.VITE_API_URL;
+const getAuthHeader = () => {
+  const token = localStorage.getItem("token");
+  return {
+    Authorization: `Bearer ${token}`,
+  };
+};
 if (!API) throw new Error("Missing API URL");
 const handleResponse = async (response) => {
   let data;
@@ -22,15 +28,14 @@ export const addNewExpense = async (
   category,
   subCategory,
   rating,
-  email,
   experience,
 ) => {
   const response = await fetch(`${API}/api/expense/NewExpense`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...getAuthHeader(),
     },
-    credentials: "include",
     body: JSON.stringify({
       title,
       amount,
@@ -47,7 +52,7 @@ export const addNewExpense = async (
 export const getSavedExpenses = async () => {
   const response = await fetch(`${API}/api/expense/YourExpenses`, {
     method: "GET",
-    credentials: "include",
+    headers: getAuthHeader(),
   });
   const data = await handleResponse(response);
   return data.map(mapServerToLocalItem);
@@ -58,8 +63,8 @@ export const editExpenseItem = async (id, updatedData) => {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      ...getAuthHeader(),
     },
-    credentials: "include",
     body: JSON.stringify(updatedData),
   });
   const data = await handleResponse(response);
@@ -69,7 +74,7 @@ export const editExpenseItem = async (id, updatedData) => {
 export const expenseItemById = async (id) => {
   const response = await fetch(`${API}/api/expense/YourExpenses/${id}`, {
     method: "GET",
-    credentials: "include",
+    headers: getAuthHeader(),
   });
 
   const data = await handleResponse(response);
@@ -93,7 +98,7 @@ const mapServerToLocalItem = (serveritem) => {
 export const deleteExpenseItem = async (id) => {
   const response = await fetch(`${API}/api/expense/DeleteExpense/${id}`, {
     method: "DELETE",
-    credentials: "include",
+    headers: getAuthHeader(),
   });
 
   await handleResponse(response);

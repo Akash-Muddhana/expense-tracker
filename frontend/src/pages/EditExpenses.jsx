@@ -2,7 +2,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { editExpenseItem, expenseItemById } from "../../services/itemService";
-
 export function EditExpenses({ isLoggedIn, setIsLoggedIn }) {
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
@@ -12,10 +11,13 @@ export function EditExpenses({ isLoggedIn, setIsLoggedIn }) {
   if (!API) throw new Error("Missing API URL");
   useEffect(() => {
     async function init() {
+      const token = localStorage.getItem("token");
+      const authHeaders = token
+        ? { headers: { Authorization: `Bearer ${token}` } }
+        : {};
+
       try {
-        await axios.get(`${API}/api/auth/auth-check`, {
-          withCredentials: true,
-        });
+        await axios.get(`${API}/api/auth/auth-check`, authHeaders);
 
         setIsLoggedIn(true);
 
@@ -25,7 +27,7 @@ export function EditExpenses({ isLoggedIn, setIsLoggedIn }) {
       } catch {
         setIsLoggedIn(false);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     }
 

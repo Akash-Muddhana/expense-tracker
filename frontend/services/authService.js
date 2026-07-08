@@ -10,7 +10,6 @@ export const newUser = async (firstName, secondName, email, password) => {
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: "include",
     body: JSON.stringify({ firstName, secondName, email, password }),
   });
 
@@ -34,7 +33,6 @@ export const login = async (email, password) => {
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: "include",
     body: JSON.stringify({ email, password }),
   });
 
@@ -43,6 +41,7 @@ export const login = async (email, password) => {
   if (!response.ok) {
     throw data;
   }
+  localStorage.setItem("token",data.token)
 
   return data;
 };

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { login } from "../../services/authService";
+
 export function Login({ isLoggedIn, setIsLoggedIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,10 +12,13 @@ export function Login({ isLoggedIn, setIsLoggedIn }) {
   if (!API) throw new Error("Missing API URL");
   const navigate = useNavigate();
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    const authHeaders = token
+      ? { headers: { Authorization: `Bearer ${token}` } }
+      : {};
+
     axios
-      .get(`${API}/api/auth/auth-check`, {
-        withCredentials: true,
-      })
+      .get(`${API}/api/auth/auth-check`, authHeaders)
       .then(() => setIsLoggedIn(true))
       .catch(() => setIsLoggedIn(false));
   }, []);

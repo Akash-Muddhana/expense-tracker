@@ -10,6 +10,7 @@ export function NewExpense({ isLoggedIn, setIsLoggedIn }) {
   const [amount, setAmount] = useState("");
   const API = import.meta.env.VITE_API_URL;
   if (!API) throw new Error("Missing API URL");
+
   const saveExpenses = async () => {
     try {
       console.log("before api");
@@ -47,10 +48,13 @@ export function NewExpense({ isLoggedIn, setIsLoggedIn }) {
     Savings: ["Savings", "Investments", "Emergency Fund"],
   };
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    const authHeaders = token
+      ? { headers: { Authorization: `Bearer ${token}` } }
+      : {};
+
     axios
-      .get(`${API}/api/auth/auth-check`, {
-        withCredentials: true,
-      })
+      .get(`${API}/api/auth/auth-check`, authHeaders)
       .then(() => setIsLoggedIn(true))
       .catch(() => setIsLoggedIn(false));
   }, []);

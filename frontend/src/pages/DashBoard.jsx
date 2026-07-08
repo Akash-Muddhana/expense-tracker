@@ -11,10 +11,13 @@ export function DashBoard({ isLoggedIn, setIsLoggedIn }) {
   const [expenses, setExpenses] = useState([]);
   useEffect(() => {
     async function init() {
+      const token = localStorage.getItem("token");
+      const authHeaders = token
+        ? { headers: { Authorization: `Bearer ${token}` } }
+        : {};
+
       try {
-        await axios.get(`${API}/api/auth/auth-check`, {
-          withCredentials: true,
-        });
+        await axios.get(`${API}/api/auth/auth-check`, authHeaders);
 
         setIsLoggedIn(true);
 
