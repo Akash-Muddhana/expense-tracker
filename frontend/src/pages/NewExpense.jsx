@@ -1,16 +1,12 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { addNewExpense } from "../../services/itemService";
-export function NewExpense({ isLoggedIn, setIsLoggedIn }) {
+export function NewExpense() {
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [rating, setRating] = useState(0);
   const [title, setTitle] = useState("");
   const [experience, setExperience] = useState("");
   const [amount, setAmount] = useState("");
-  const API = import.meta.env.VITE_API_URL;
-  if (!API) throw new Error("Missing API URL");
-
   const saveExpenses = async () => {
     try {
       console.log("before api");
@@ -47,21 +43,8 @@ export function NewExpense({ isLoggedIn, setIsLoggedIn }) {
     Emergency: ["Repairs", "Gifts", "Family Help"],
     Savings: ["Savings", "Investments", "Emergency Fund"],
   };
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const authHeaders = token
-      ? { headers: { Authorization: `Bearer ${token}` } }
-      : {};
-
-    axios
-      .get(`${API}/api/auth/auth-check`, authHeaders)
-      .then(() => setIsLoggedIn(true))
-      .catch(() => setIsLoggedIn(false));
-  }, []);
   return (
-    <>
-      {isLoggedIn ? (
-        <main className="w-full flex flex-col items-center gap-6 py-8 px-4">
+            <main className="w-full flex flex-col items-center gap-6 py-8 px-4">
           <div className="bg-white rounded-2xl shadow-soft p-8 w-full max-w-md">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-8 text-center">
               Add New Expense
@@ -173,13 +156,5 @@ export function NewExpense({ isLoggedIn, setIsLoggedIn }) {
             </div>
           </div>
         </main>
-      ) : (
-        <main className="w-full flex flex-col items-center min-h-calc-screen gap-8 py-8 px-4">
-          <p className="mt-12 text-lg text-gray-300 text-center p-8 bg-white rounded-2xl shadow-soft min-w-[300px]">
-            Please log in to view your dashboard.
-          </p>
-        </main>
-      )}
-    </>
   );
 }

@@ -1,23 +1,17 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getSavedExpenses } from "../../services/itemService";
 import { deleteExpenseItem } from "../../services/itemService";
-export function YourExpenses({ isLoggedIn, setIsLoggedIn }) {
+export function YourExpenses() {
   const [expenses, setExpenses] = useState([]);
+  const navigate = useNavigate();
+
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const items = await getSavedExpenses();
-        setExpenses(items);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    fetchData();
+    getSavedExpenses()
+      .then(setExpenses)
+      .catch((error) => console.error("Failed to load expenses:", error));
   }, []);
-  const API = import.meta.env.VITE_API_URL;
-  if (!API) throw new Error("Missing API URL");
+
   const total = expenses.reduce((sum, item) => sum + Number(item.amount), 0);
   const usedProperly = expenses.reduce(
     (sum, item) => sum + Number(item.rating >= 3 ? item.amount : 0),
@@ -28,49 +22,41 @@ export function YourExpenses({ isLoggedIn, setIsLoggedIn }) {
     0,
   );
 
-  const navigate = useNavigate();
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const authHeaders = token
-      ? { headers: { Authorization: `Bearer ${token}` } }
-      : {};
-
-    axios
-      .get(`${API}/api/auth/auth-check`, authHeaders)
-      .then(() => setIsLoggedIn(true))
-      .catch(() => setIsLoggedIn(false));
-  }, []);
   return (
-    <>
-      {isLoggedIn ? (
-        <main className="w-full flex flex-col items-center min-h-calc-screen py-8 px-4">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-8 drop-shadow-md">
+    <main className="mx-auto flex min-h-calc-screen w-full max-w-5xl flex-col items-center px-4 py-10 sm:px-6">
+          <h2 className="mb-2 text-center text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
             Your Expenses
           </h2>
+          <p className="mb-8 text-center text-slate-500">
+            A clear view of where your money went.
+          </p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-4 flex-wrap w-full mb-8">
-            <div className="bg-white text-primary-500 p-4 rounded-xl font-semibold text-center min-w-[240px] shadow-soft border-l-4 border-primary-500">
-              Total: ₹ {total}
+          <div className="mb-8 grid w-full grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+              <p className="text-sm font-medium text-slate-500">Total</p>
+              <p className="mt-1 text-xl font-bold text-slate-900">₹ {total.toLocaleString("en-IN")}</p>
             </div>
-            <div className="bg-white text-danger-600 p-4 rounded-xl font-semibold text-center min-w-[240px] shadow-soft border-l-4 border-danger-600">
-              Wasted: ₹ {wasted}
+            <div className="rounded-2xl border border-rose-100 bg-white p-4 shadow-sm">
+              <p className="text-sm font-medium text-slate-500">Needs a second look</p>
+              <p className="mt-1 text-xl font-bold text-rose-600">₹ {wasted.toLocaleString("en-IN")}</p>
             </div>
-            <div className="bg-white text-success-500 p-4 rounded-xl font-semibold text-center min-w-[240px] shadow-soft border-l-4 border-success-500">
-              Utilized: ₹ {usedProperly}
+            <div className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
+              <p className="text-sm font-medium text-slate-500">Used well</p>
+              <p className="mt-1 text-xl font-bold text-emerald-600">₹ {usedProperly.toLocaleString("en-IN")}</p>
             </div>
           </div>
 
-          <div className="w-full flex flex-col items-center gap-4">
+          <div className="flex w-full flex-col items-center gap-4">
             {expenses.length === 0 && (
-              <p className="text-lg text-gray-300 text-center p-8 bg-white rounded-xl shadow-soft min-w-[300px]">
+              <p className="rounded-2xl border border-dashed border-slate-300 bg-white px-8 py-6 text-center text-slate-500">
                 No expenses recorded yet. Start by adding your first expense! 📊
               </p>
             )}
 
-            {expenses.map((e, i) => (
+            {expenses.map((e) => (
               <div
                 key={e.id}
-                className="bg-white rounded-xl shadow-soft p-5 w-full max-w-2xl border-l-4 border-primary-500 hover:-translate-y-1 transition-all duration-300"
+                className="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
                   <div>
@@ -129,13 +115,5 @@ export function YourExpenses({ isLoggedIn, setIsLoggedIn }) {
             ))}
           </div>
         </main>
-      ) : (
-        <main className="w-full flex flex-col items-center min-h-calc-screen gap-8 py-8 px-4">
-          <p className="mt-12 text-lg text-gray-300 text-center p-8 bg-white rounded-2xl shadow-soft min-w-[300px]">
-            Please log in to view your dashboard.
-          </p>
-        </main>
-      )}
-    </>
   );
 }

@@ -1,11 +1,24 @@
-const API = import.meta.env.VITE_API_URL;
-const getAuthHeader = () => {
+import API from "./api";
+const GUEST_ID_KEY = "guestId";
+
+const getRequestHeaders = () => {
+  let guestId = localStorage.getItem(GUEST_ID_KEY);
+  if (
+    !guestId ||
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+      guestId,
+    )
+  ) {
+    guestId = crypto.randomUUID();
+    localStorage.setItem(GUEST_ID_KEY, guestId);
+  }
+
+  const headers = { "X-Guest-Id": guestId };
   const token = localStorage.getItem("token");
-  return {
-    Authorization: `Bearer ${token}`,
-  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  return headers;
 };
-if (!API) throw new Error("Missing API URL");
+
 const handleResponse = async (response) => {
   let data;
 
@@ -22,6 +35,7 @@ const handleResponse = async (response) => {
 
   return data;
 };
+
 export const addNewExpense = async (
   title,
   amount,
@@ -34,7 +48,7 @@ export const addNewExpense = async (
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      ...getAuthHeader(),
+      ...getRequestHeaders(),
     },
     body: JSON.stringify({
       title,
@@ -52,7 +66,7 @@ export const addNewExpense = async (
 export const getSavedExpenses = async () => {
   const response = await fetch(`${API}/api/expense/YourExpenses`, {
     method: "GET",
-    headers: getAuthHeader(),
+    headers: getRequestHeaders(),
   });
   const data = await handleResponse(response);
   return data.map(mapServerToLocalItem);
@@ -63,7 +77,7 @@ export const editExpenseItem = async (id, updatedData) => {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      ...getAuthHeader(),
+      ...getRequestHeaders(),
     },
     body: JSON.stringify(updatedData),
   });
@@ -74,7 +88,7 @@ export const editExpenseItem = async (id, updatedData) => {
 export const expenseItemById = async (id) => {
   const response = await fetch(`${API}/api/expense/YourExpenses/${id}`, {
     method: "GET",
-    headers: getAuthHeader(),
+    headers: getRequestHeaders(),
   });
 
   const data = await handleResponse(response);
@@ -91,14 +105,14 @@ const mapServerToLocalItem = (serveritem) => {
     subCategory: serveritem.subCategory,
     rating: serveritem.rating,
     experience: serveritem.experience,
-
     date: serveritem.date,
   };
 };
+
 export const deleteExpenseItem = async (id) => {
   const response = await fetch(`${API}/api/expense/DeleteExpense/${id}`, {
     method: "DELETE",
-    headers: getAuthHeader(),
+    headers: getRequestHeaders(),
   });
 
   await handleResponse(response);

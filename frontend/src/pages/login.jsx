@@ -2,14 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { login } from "../../services/authService";
+import API from "../../services/api";
 
 export function Login({ isLoggedIn, setIsLoggedIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const API = import.meta.env.VITE_API_URL;
-  if (!API) throw new Error("Missing API URL");
   const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -33,7 +32,7 @@ export function Login({ isLoggedIn, setIsLoggedIn }) {
       navigate("/");
     } catch (err) {
       console.error("error while adding user", err);
-      setError("Login failed. Please check your credentials.");
+      setError(err.message || "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }

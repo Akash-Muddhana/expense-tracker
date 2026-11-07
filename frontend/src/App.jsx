@@ -16,51 +16,27 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={
-            <DashBoard isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-          }
+          element={<DashBoard />}
         />
         <Route
           path="/NewExpense"
-          element={
-            <NewExpense isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-          }
+          element={<NewExpense />}
         />
         <Route
           path="/expenses"
-          element={
-            <YourExpenses
-              isLoggedIn={isLoggedIn}
-              setIsLoggedIn={setIsLoggedIn}
-            />
-          }
+          element={<YourExpenses />}
         />
         <Route
           path="/EditExpenses"
-          element={
-            <YourExpenses
-              isLoggedIn={isLoggedIn}
-              setIsLoggedIn={setIsLoggedIn}
-            />
-          }
+          element={<YourExpenses />}
         />
         <Route
           path="/EditExpenses/:id"
-          element={
-            <EditExpenses
-              isLoggedIn={isLoggedIn}
-              setIsLoggedIn={setIsLoggedIn}
-            />
-          }
+          element={<EditExpenses />}
         />
         <Route
           path="/edit/:id"
-          element={
-            <EditExpenses
-              isLoggedIn={isLoggedIn}
-              setIsLoggedIn={setIsLoggedIn}
-            />
-          }
+          element={<EditExpenses />}
         />
         <Route
           path="/login"

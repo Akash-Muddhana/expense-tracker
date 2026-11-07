@@ -2,37 +2,15 @@ import { StatusGauge } from "./StatusGauge";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getSavedExpenses } from "../../services/itemService";
-import axios from "axios";
-const API = import.meta.env.VITE_API_URL;
-if (!API) throw new Error("Missing API URL");
-export function DashBoard({ isLoggedIn, setIsLoggedIn }) {
+export function DashBoard() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
   const [expenses, setExpenses] = useState([]);
+
   useEffect(() => {
-    async function init() {
-      const token = localStorage.getItem("token");
-      const authHeaders = token
-        ? { headers: { Authorization: `Bearer ${token}` } }
-        : {};
-
-      try {
-        await axios.get(`${API}/api/auth/auth-check`, authHeaders);
-
-        setIsLoggedIn(true);
-
-        const items = await getSavedExpenses();
-        setExpenses(items);
-      } catch {
-        setIsLoggedIn(false);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    init();
+    getSavedExpenses()
+      .then(setExpenses)
+      .catch((error) => console.error("Failed to load expenses:", error));
   }, []);
-
   const now = new Date();
 
   const currentMonthExpenses = expenses.filter((item) => {
@@ -64,23 +42,30 @@ export function DashBoard({ isLoggedIn, setIsLoggedIn }) {
   const monthlyDifferentiate = monthlyUsedProperly - monthlyWasted;
 
   return (
-    <>
-      {isLoggedIn ? (
-        <main className="w-full flex flex-col items-center min-h-calc-screen gap-8 py-8 px-4">
-          <div className="flex flex-col items-center gap-3">
+    <main className="mx-auto flex min-h-calc-screen w-full max-w-6xl flex-col items-center gap-8 px-4 py-10 sm:px-6">
+          <div className="flex w-full flex-col items-center gap-5 rounded-3xl border border-white/80 bg-white/70 px-5 py-8 text-center shadow-sm backdrop-blur sm:py-10">
+            <div>
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-indigo-600">
+                Your money, at a glance
+              </p>
+              <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                Expense dashboard
+              </h1>
+              <p className="mt-2 text-sm text-slate-500 sm:text-base">
+                See how you spent this month and keep your goals on track.
+              </p>
+            </div>
             <button
               onClick={() => navigate("/NewExpense")}
-              className="w-14 h-14 rounded-full bg-gradient-primary text-white cursor-pointer text-2xl font-bold flex items-center justify-center shadow-lg hover:-translate-y-1 transition-all duration-300 active:-translate-y-0.5"
+              className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:-translate-y-0.5 hover:bg-indigo-700 hover:shadow-xl active:translate-y-0"
             >
-              <span>+</span>
+              <span className="text-xl leading-none">+</span>
+              Add expense
             </button>
-            <h4 className="m-0 text-sm sm:text-base font-semibold text-white drop-shadow-md">
-              Add new expense
-            </h4>
           </div>
 
-          <div className="w-full flex justify-center">
-            <div className="bg-white rounded-2xl shadow-soft p-8 flex justify-center">
+          <div className="flex w-full justify-center">
+            <div className="flex w-full max-w-xl justify-center rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-8">
               <StatusGauge
                 value={monthlyDifferentiate}
                 min={monthlyTotal === 0 ? -1 : -monthlyTotal}
@@ -90,32 +75,37 @@ export function DashBoard({ isLoggedIn, setIsLoggedIn }) {
           </div>
 
           {expenses.length === 0 && (
-            <p className="mt-12 text-lg text-gray-300 text-center p-8 bg-white rounded-2xl shadow-soft min-w-[300px]">
-              No expenses yet
+            <p className="rounded-2xl border border-dashed border-slate-300 bg-white/70 px-8 py-6 text-center text-slate-500">
+              No expenses yet. Add one to see your monthly summary.
             </p>
           )}
 
-          <div className="flex flex-col sm:flex-row justify-center gap-6 flex-wrap w-full px-4">
-            <div className="bg-gradient-primary text-white p-6 rounded-2xl font-semibold text-center min-w-[240px] shadow-soft hover:-translate-y-1 transition-all duration-300">
-              Expenses This Month: ₹ {monthlyTotal}
+          <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="rounded-2xl border border-indigo-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+              <p className="text-sm font-medium text-slate-500">
+                Expenses this month
+              </p>
+              <p className="mt-2 text-2xl font-bold tracking-tight text-indigo-700">
+                ₹ {monthlyTotal.toLocaleString("en-IN")}
+              </p>
             </div>
 
-            <div className="bg-gradient-danger text-white p-6 rounded-2xl font-semibold text-center min-w-[240px] shadow-soft hover:-translate-y-1 transition-all duration-300">
-              Wasted Money: ₹ {monthlyWasted}
+            <div className="rounded-2xl border border-rose-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+              <p className="text-sm font-medium text-slate-500">
+                Needs a second look
+              </p>
+              <p className="mt-2 text-2xl font-bold tracking-tight text-rose-600">
+                ₹ {monthlyWasted.toLocaleString("en-IN")}
+              </p>
             </div>
 
-            <div className="bg-gradient-success text-white p-6 rounded-2xl font-semibold text-center min-w-[240px] shadow-soft hover:-translate-y-1 transition-all duration-300">
-              Utilized Properly: ₹ {monthlyUsedProperly}
+            <div className="rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+              <p className="text-sm font-medium text-slate-500">Used well</p>
+              <p className="mt-2 text-2xl font-bold tracking-tight text-emerald-600">
+                ₹ {monthlyUsedProperly.toLocaleString("en-IN")}
+              </p>
             </div>
           </div>
-        </main>
-      ) : (
-        <main className="w-full flex flex-col items-center min-h-calc-screen gap-8 py-8 px-4">
-          <p className="mt-12 text-lg text-gray-300 text-center p-8 bg-white rounded-2xl shadow-soft min-w-[300px]">
-            Please log in to view your dashboard.
-          </p>
-        </main>
-      )}
-    </>
+    </main>
   );
 }

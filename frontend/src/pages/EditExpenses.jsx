@@ -1,31 +1,19 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { editExpenseItem, expenseItemById } from "../../services/itemService";
-export function EditExpenses({ isLoggedIn, setIsLoggedIn }) {
+export function EditExpenses() {
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const navigate = useNavigate();
   const [expenses, setExpenses] = useState(null);
-  const API = import.meta.env.VITE_API_URL;
-  if (!API) throw new Error("Missing API URL");
   useEffect(() => {
     async function init() {
-      const token = localStorage.getItem("token");
-      const authHeaders = token
-        ? { headers: { Authorization: `Bearer ${token}` } }
-        : {};
-
       try {
-        await axios.get(`${API}/api/auth/auth-check`, authHeaders);
-
-        setIsLoggedIn(true);
-
         const item = await expenseItemById(id);
         if (!item) throw new Error("Invalid expense data");
         setExpenses(item);
-      } catch {
-        setIsLoggedIn(false);
+      } catch (error) {
+        console.error("Failed to load expense:", error);
       } finally {
         setLoading(false);
       }
@@ -33,7 +21,6 @@ export function EditExpenses({ isLoggedIn, setIsLoggedIn }) {
 
     init();
   }, [id]);
-
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
@@ -84,7 +71,6 @@ export function EditExpenses({ isLoggedIn, setIsLoggedIn }) {
 
   return (
     <>
-      {isLoggedIn ? (
         <main className="w-full flex flex-col items-center gap-6 py-8 px-4">
           <div className="bg-white rounded-2xl shadow-soft p-8 w-full max-w-md">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-8 text-center">
@@ -195,13 +181,6 @@ export function EditExpenses({ isLoggedIn, setIsLoggedIn }) {
             </div>
           </div>
         </main>
-      ) : (
-        <main className="w-full flex flex-col items-center min-h-calc-screen gap-8 py-8 px-4">
-          <p className="mt-12 text-lg text-gray-300 text-center p-8 bg-white rounded-2xl shadow-soft min-w-[300px]">
-            Please log in to view your dashboard.
-          </p>
-        </main>
-      )}
     </>
   );
 }
